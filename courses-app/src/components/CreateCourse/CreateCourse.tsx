@@ -1,6 +1,7 @@
 import moment from 'moment';
 import React, { useRef, useState } from 'react';
 import { Col, Container, Form, Row } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import { CustomButton } from '../../common/Button/Button';
 import { mockedAuthorsList, mockedCoursesList } from '../../constants';
@@ -21,6 +22,7 @@ export const CreateCourse: React.FC = () => {
 	const authorNameInputRef = useRef<HTMLInputElement>(null);
 	const courseTitleInputRef = useRef<HTMLInputElement>(null);
 	const courseDescInputRef = useRef<HTMLTextAreaElement>(null);
+	const navigate = useNavigate();
 
 	const createAuthorHandler = () => {
 		if (authorNameInputRef.current) {
@@ -54,7 +56,12 @@ export const CreateCourse: React.FC = () => {
 		const titleRef = courseTitleInputRef.current;
 		const descriptionRef = courseDescInputRef.current;
 
-		if (titleRef?.value === '' || descriptionRef?.value === '') {
+		if (
+			titleRef?.value === '' ||
+			descriptionRef?.value === '' ||
+			duration === 0 ||
+			courseAuthors.length === 0
+		) {
 			alert('Please fill all fields.');
 		} else if (titleRef && descriptionRef) {
 			const course = {
@@ -68,6 +75,9 @@ export const CreateCourse: React.FC = () => {
 			mockedCoursesList.push(course);
 			titleRef.value = '';
 			descriptionRef.value = '';
+			setCourseAuthors([]);
+			setDuration(0);
+			navigate('/');
 		}
 	};
 
