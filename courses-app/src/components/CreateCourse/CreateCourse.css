@@ -1,0 +1,12 @@
+.create-course-header{
+    margin: 20px;
+}
+
+.authors-details{
+    border: 2px solid grey;
+    border-radius: 5px;
+}
+
+.author-heading{
+   text-align: center;
+}

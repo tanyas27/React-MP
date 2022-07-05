@@ -1,0 +1,20 @@
+header {
+  border: 2px solid rgb(223, 96, 41);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  border-radius: 15px;
+}
+
+header .user{
+  display: flex;
+  justify-content: space-between;
+  width: 15%;
+}
+
+header .user-name{
+  color: rgba(0, 0, 0, 0.68);
+  font-size: 20px;
+  font-weight: bold;
+}
