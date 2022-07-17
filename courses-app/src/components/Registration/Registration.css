@@ -1,0 +1,9 @@
+.register{
+    width: 30%;
+    margin: auto;
+    padding: 10px;
+}
+
+.register h2{
+   text-align: center;
+}

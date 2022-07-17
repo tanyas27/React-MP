@@ -1,0 +1,12 @@
+.course-info{
+    display: flex;
+}
+
+.course-info p{
+    width: 60%;
+    margin: 0 15px;
+}
+
+.course-info-details{
+    margin: 0 10px;
+}

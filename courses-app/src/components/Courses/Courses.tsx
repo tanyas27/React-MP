@@ -27,7 +27,7 @@ export const Courses: React.FC = () => {
 		<>
 			<div className='toolbar'>
 				<SearchBar searchFn={searchHandler} />
-				<Link to='/add-course'>
+				<Link to='add'>
 					<CustomButton
 						role='danger'
 						click={() => {}}

@@ -6,14 +6,9 @@ import { v4 as uuidv4 } from 'uuid';
 import { CustomButton } from '../../common/Button/Button';
 import { mockedAuthorsList, mockedCoursesList } from '../../constants';
 import { getCourseDuration } from '../../helpers/getCourseDuration';
+import { IAuthor, IAuthorList } from '../interface';
 import { AuthorItem } from './components/AuthorItem/AuthorItem';
 import './CreateCourse.css';
-
-interface IAuthor {
-	id: string;
-	name: string;
-}
-type IAuthorList = IAuthor[];
 
 export const CreateCourse: React.FC = () => {
 	const [authors, setAuthors] = useState(mockedAuthorsList);
@@ -77,7 +72,7 @@ export const CreateCourse: React.FC = () => {
 			descriptionRef.value = '';
 			setCourseAuthors([]);
 			setDuration(0);
-			navigate('/');
+			navigate('/courses');
 		}
 	};
 

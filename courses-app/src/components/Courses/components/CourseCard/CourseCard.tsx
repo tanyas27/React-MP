@@ -4,23 +4,22 @@ import { CustomButton } from '../../../../common/Button/Button';
 import { mockedAuthorsList } from '../../../../constants';
 import './CourseCard.css';
 import { getCourseDuration } from '../../../../helpers/getCourseDuration';
-
-interface ICourseCardProps {
-	data: {
-		id: string;
-		title: string;
-		description: string;
-		creationDate: string;
-		duration: number;
-		authors: string[];
-	};
-}
+import { useLocation, useNavigate } from 'react-router-dom';
+import { ICourseCardProps } from '../../../interface';
 
 export const CourseCard: React.FC<ICourseCardProps> = ({ data }) => {
+	const loc = useLocation();
+	const nav = useNavigate();
+
 	const authorsList = mockedAuthorsList
 		.filter((authorObject) => data.authors.includes(authorObject.id))
 		.map((author) => author.name)
 		.join(', ');
+
+	const showCourseHandler = (id: string) => {
+		const path = loc.pathname + '/' + id;
+		nav(path);
+	};
 
 	return (
 		<section className='course-card'>
@@ -39,7 +38,11 @@ export const CourseCard: React.FC<ICourseCardProps> = ({ data }) => {
 					<strong>Created Date</strong>:{' '}
 					{moment(data.creationDate).format('DD.MM.YYYY')}
 				</div>
-				<CustomButton buttonText='Show Course' role='info' click={() => {}} />
+				<CustomButton
+					buttonText='Show Course'
+					role='info'
+					click={() => showCourseHandler(data.id)}
+				/>
 			</div>
 		</section>
 	);

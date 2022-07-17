@@ -1,16 +1,32 @@
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, Navigate } from 'react-router-dom';
 import './App.css';
-import { Courses } from './components/Courses/Courses';
-import { CreateCourse } from './components/CreateCourse/CreateCourse';
-import { Header } from './components/Header/Header';
+import {
+	Header,
+	Courses,
+	CreateCourse,
+	Registration,
+	Login,
+	CourseInfo,
+} from './components';
+import PrivateRoute from './components/PrivateRoute/PrivateRoute';
 
 function App() {
 	return (
 		<div className='App'>
 			<Header />
 			<Routes>
-				<Route path='/' element={<Courses />} />
-				<Route path='/add-course' element={<CreateCourse />} />
+				<Route path='/' element={<Navigate to='/login' replace={true} />} />
+				<Route path='/registration' element={<Registration />} />
+				<Route path='/login' element={<Login />} />
+				<Route path='/courses' element={<PrivateRoute component={Courses} />} />
+				<Route
+					path='/courses/:courseId'
+					element={<PrivateRoute component={CourseInfo} />}
+				/>
+				<Route
+					path='/courses/add'
+					element={<PrivateRoute component={CreateCourse} />}
+				/>
 			</Routes>
 		</div>
 	);
