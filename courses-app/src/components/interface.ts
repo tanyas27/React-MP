@@ -24,6 +24,13 @@ export interface IUser {
 	email: string;
 }
 
+export interface IStoredUser {
+	isAuth: boolean;
+	name: string;
+	email: string;
+	token: string;
+}
+
 export interface IAuthor {
 	id: string;
 	name: string;

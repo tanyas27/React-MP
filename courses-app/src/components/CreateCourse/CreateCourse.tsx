@@ -1,17 +1,28 @@
+import {
+	Box,
+	FormControl,
+	Grid,
+	InputLabel,
+	OutlinedInput,
+} from '@mui/material';
 import moment from 'moment';
-import React, { useRef, useState } from 'react';
-import { Col, Container, Form, Row } from 'react-bootstrap';
+import React, { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import { CustomButton } from '../../common/Button/Button';
-import { mockedAuthorsList, mockedCoursesList } from '../../constants';
 import { getCourseDuration } from '../../helpers/getCourseDuration';
+import { RootState } from '../../store';
+import { saveNewAuthor } from '../../store/authors/authorSlice';
+import { saveNewCourse } from '../../store/courses/coursesSlice';
 import { IAuthor, IAuthorList } from '../interface';
 import { AuthorItem } from './components/AuthorItem/AuthorItem';
 import './CreateCourse.css';
 
 export const CreateCourse: React.FC = () => {
-	const [authors, setAuthors] = useState(mockedAuthorsList);
+	const authors = useSelector<RootState, IAuthorList>((state) => state.authors);
+	const dispatch = useDispatch();
+
 	const [duration, setDuration] = useState<number>(0);
 	const [courseAuthors, setCourseAuthors] = useState<IAuthorList>([]);
 	const authorNameInputRef = useRef<HTMLInputElement>(null);
@@ -23,12 +34,10 @@ export const CreateCourse: React.FC = () => {
 		if (authorNameInputRef.current) {
 			const name = authorNameInputRef.current.value;
 			const author = {
-				name,
 				id: uuidv4(),
+				name,
 			};
-			const authorList = [...authors];
-			authorList.push(author);
-			setAuthors(authorList);
+			dispatch(saveNewAuthor(author));
 			authorNameInputRef.current.value = '';
 		}
 	};
@@ -67,91 +76,134 @@ export const CreateCourse: React.FC = () => {
 				duration,
 				authors: [...courseAuthors.map((author) => author.id)],
 			};
-			mockedCoursesList.push(course);
+			dispatch(saveNewCourse(course));
 			titleRef.value = '';
 			descriptionRef.value = '';
 			setCourseAuthors([]);
 			setDuration(0);
-			navigate('/courses');
+			navigate(-1);
 		}
 	};
 
 	return (
-		<Form>
-			<div className='create-course-header'>
-				<Form.Group className='mb-3'>
-					<Form.Label>Title</Form.Label>
-					<span style={{ display: 'flex', justifyContent: 'space-between' }}>
-						<Form.Control
-							type='text'
-							placeholder='Enter title...'
-							style={{ width: '30%' }}
-							ref={courseTitleInputRef}
-						/>
-						<CustomButton
-							buttonText='Create course'
-							click={createCourseHandler}
-							role='primary'
-						/>
-					</span>
-				</Form.Group>
-				<Form.Group className='mb-3'>
-					<Form.Label>Description</Form.Label>
-					<Form.Control
-						as='textarea'
-						rows={3}
-						ref={courseDescInputRef}
-						placeholder='Enter description...'
-					/>
-				</Form.Group>
-			</div>
-
-			<Container className='authors-details'>
-				<Row>
-					<Col>
-						<strong>Add author</strong>
-						<Form.Group className='mb-3'>
-							<Form.Label>Author name</Form.Label>
-							<Form.Control
+		<>
+			<Box
+				id='login-form'
+				component='form'
+				onSubmit={() => {}}
+				sx={{
+					'& .MuiTextField-root': { m: 2, width: '25ch' },
+				}}
+				autoComplete='off'
+			>
+				<div className='create-course-header'>
+					<div className='create-course-title'>
+						<FormControl fullWidth sx={{ m: 2 }} style={{ width: '40%' }}>
+							<InputLabel htmlFor='outlined-title'>Title</InputLabel>
+							<OutlinedInput
+								required
+								id='outlined-title'
 								type='text'
+								label='Title'
+								placeholder='Enter title...'
+								inputRef={courseTitleInputRef}
+							/>
+						</FormControl>
+						<CustomButton
+							click={createCourseHandler}
+							role='contained'
+							color='success'
+						>
+							Create course
+						</CustomButton>
+					</div>
+					<FormControl fullWidth sx={{ m: 2 }}>
+						<InputLabel htmlFor='outlined-description'>Description</InputLabel>
+						<OutlinedInput
+							required
+							id='outlined-description'
+							type='text'
+							multiline
+							maxRows={4}
+							label='Description'
+							inputRef={courseDescInputRef}
+							placeholder='Enter description...'
+							fullWidth
+						/>
+					</FormControl>{' '}
+				</div>
+				<Grid
+					id='create-course-border'
+					container
+					rowSpacing={1}
+					columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+				>
+					<Grid
+						item
+						xs={6}
+						style={{
+							display: 'flex',
+							flexDirection: 'column',
+							alignItems: 'flex-start',
+						}}
+					>
+						<strong>Add author</strong>
+						<FormControl fullWidth sx={{ m: 2 }} style={{ width: '40%' }}>
+							<InputLabel htmlFor='outlined-author-name'>
+								Author name
+							</InputLabel>
+							<OutlinedInput
+								required
+								id='outlined-author-name'
+								type='text'
+								label='Author name'
 								placeholder='Enter author name...'
-								ref={authorNameInputRef}
+								inputRef={authorNameInputRef}
 							/>
-							<CustomButton
-								buttonText='Create author'
-								click={() => createAuthorHandler()}
-								role='outline-primary'
-							/>
-						</Form.Group>
-					</Col>
-					<Col>
+						</FormControl>
+						<CustomButton click={() => createAuthorHandler()} role='contained'>
+							Create author
+						</CustomButton>
+					</Grid>
+					<Grid item xs={6}>
 						<strong>Authors</strong>
 						<div className='authors-list'>
-							{authors.map((author) => (
-								<AuthorItem
-									authorName={author.name}
-									editAuthor={() => addCourseAuthorHandler(author)}
-									edit='Add'
-									key={author.id}
-								/>
-							))}
+							{authors.length > 0 &&
+								authors.map((author) => (
+									<AuthorItem
+										authorName={author.name}
+										editAuthor={() => addCourseAuthorHandler(author)}
+										edit='Add'
+										key={author.id}
+									/>
+								))}
 						</div>
-					</Col>
-				</Row>
-				<Row>
-					<Col>
+					</Grid>
+					<Grid
+						item
+						xs={6}
+						style={{
+							display: 'flex',
+							flexDirection: 'column',
+							alignItems: 'flex-start',
+						}}
+					>
 						<strong>Duration</strong>
-						<Form.Group className='mb-3'>
-							<Form.Label>Duration</Form.Label>
-							<Form.Control
+						<FormControl fullWidth sx={{ m: 2 }} style={{ width: '40%' }}>
+							<InputLabel htmlFor='outlined-duration'>Duration</InputLabel>
+							<OutlinedInput
+								required
+								id='outlined-duration'
 								type='number'
+								label='Duration'
 								placeholder='Enter duration in minutes...'
 								onChange={(e) => setDuration(+e.target.value)}
+								fullWidth
 							/>
-							<div>Duration: {getCourseDuration(duration)}</div>
-						</Form.Group>
-					</Col>
-					<Col>
+						</FormControl>
+						<strong>Duration: {getCourseDuration(duration)}</strong>
+					</Grid>
+					<Grid item xs={6}>
 						<strong className='author-heading'>Course authors</strong>
 						<div className='authors-list'>
 							{courseAuthors.length === 0
@@ -165,9 +217,9 @@ export const CreateCourse: React.FC = () => {
 										/>
 								  ))}
 						</div>
-					</Col>
-				</Row>
-			</Container>
-		</Form>
+					</Grid>
+				</Grid>
+			</Box>
+		</>
 	);
 };

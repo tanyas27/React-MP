@@ -1,9 +1,16 @@
 .login{
     width: 30%;
+    height: 70%;
     margin: auto;
     padding: 10px;
 }
 
 .login h2{
     text-align: center;
+}
+
+#login-form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }

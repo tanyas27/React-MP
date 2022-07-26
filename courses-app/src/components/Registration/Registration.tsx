@@ -1,17 +1,27 @@
-import { FormEvent, useRef, RefObject } from 'react';
-import { Form } from 'react-bootstrap';
-import { NavLink } from 'react-router-dom';
+import { FormEvent, useState } from 'react';
+import { FormControl, InputLabel, OutlinedInput } from '@mui/material';
+import { Box } from '@mui/system';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { CustomButton } from '../../common/Button/Button';
 import { IUser } from '../interface';
 import './Registration.css';
 
 export const Registration = () => {
-	const formRef = useRef() as RefObject<HTMLFormElement>;
+	const [user, setUser] = useState<IUser>({
+		name: '',
+		email: '',
+		password: '',
+	});
+	const nav = useNavigate();
+
+	const setUserDetails = (name: string, value: string) => {
+		setUser({ ...user, [name]: value });
+	};
 
 	const createNewUser = async (newUser: IUser) => {
 		const response = await fetch('http://localhost:4000/register', {
 			method: 'POST',
-			body: JSON.stringify(newUser),
+			body: JSON.stringify(user),
 			headers: {
 				'Content-Type': 'application/json',
 			},
@@ -21,52 +31,80 @@ export const Registration = () => {
 		return result;
 	};
 
-	const submitFormHandler = (event: FormEvent<HTMLFormElement>) => {
+	const submitFormHandler = async (event: FormEvent<HTMLFormElement>) => {
 		event?.preventDefault();
-		if (formRef.current) {
-			const newUser = {
-				name: formRef.current['user-name'].value,
-				email: formRef.current['user-email'].value,
-				password: formRef.current['password'].value,
-			};
-
-			console.log(createNewUser(newUser));
+		if (user.email.length !== 0 && user.password.length !== 0) {
+			let result = await createNewUser(user);
+			if (result) {
+				nav('/login', { replace: true });
+			}
+		} else {
+			alert('Please fill required details!');
 		}
 	};
 
 	return (
-		<div className='register'>
+		<div className={'register box'}>
 			<h2>Registration</h2>
-			<Form onSubmit={(e) => submitFormHandler(e)} ref={formRef}>
-				<Form.Group className='mb-3'>
-					<Form.Label>Name</Form.Label>
-					<Form.Control type='text' placeholder='Enter name' name='user-name' />
-				</Form.Group>
-				<Form.Group className='mb-3'>
-					<Form.Label>Email address</Form.Label>
-					<Form.Control
-						type='email'
-						placeholder='Enter email'
-						name='user-email'
+			<Box
+				id='register-form'
+				component='form'
+				onSubmit={(event: FormEvent<HTMLFormElement>) =>
+					submitFormHandler(event)
+				}
+				sx={{
+					'& .MuiTextField-root': { m: 1, width: '30ch' },
+				}}
+				autoComplete='off'
+			>
+				<FormControl fullWidth sx={{ m: 2 }}>
+					<InputLabel htmlFor='outlined-name'>Name</InputLabel>
+					<OutlinedInput
+						required
+						id='outlined-name'
+						type='text'
+						label='Name'
+						placeholder='Enter name'
+						name='name'
+						onChange={(e) => setUserDetails(e.target.name, e.target.value)}
 					/>
-				</Form.Group>
-				<Form.Group className='mb-3' controlId='formBasicPassword'>
-					<Form.Label>Password</Form.Label>
-					<Form.Control
+				</FormControl>
+				<FormControl fullWidth sx={{ m: 2 }}>
+					<InputLabel htmlFor='outlined-email'>Email Address</InputLabel>
+					<OutlinedInput
+						required
+						id='outlined-email'
+						type='email'
+						label='Email address'
+						placeholder='Enter email'
+						name='email'
+						onChange={(e) => setUserDetails(e.target.name, e.target.value)}
+					/>
+				</FormControl>
+				<FormControl fullWidth sx={{ m: 2 }}>
+					<InputLabel htmlFor='outlined-password'>Password</InputLabel>
+					<OutlinedInput
+						required
+						id='outlined-password'
+						label='Password'
 						type='password'
 						placeholder='Enter password'
 						name='password'
+						onChange={(e) => setUserDetails(e.target.name, e.target.value)}
 					/>
-				</Form.Group>
+				</FormControl>
 				<CustomButton
-					buttonText='Registration'
-					role='outline-success'
+					role='contained'
 					type='submit'
-				/>
+					color='success'
+					fullWidth={true}
+				>
+					Registration
+				</CustomButton>
 				<div>
 					If you have an account you can <NavLink to='/login'>Login</NavLink>
 				</div>
-			</Form>
+			</Box>
 		</div>
 	);
 };

@@ -6,7 +6,7 @@ interface IPrivateRouteProps {
 	props?: string;
 }
 
-const PrivateRoute: React.FC<IPrivateRouteProps> = ({
+export const PrivateRoute: React.FC<IPrivateRouteProps> = ({
 	component: RouteComponent,
 	...props
 }) => {
@@ -24,5 +24,3 @@ const PrivateRoute: React.FC<IPrivateRouteProps> = ({
 		</>
 	);
 };
-
-export default PrivateRoute;

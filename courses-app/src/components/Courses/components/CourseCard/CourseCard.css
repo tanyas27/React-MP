@@ -1,12 +1,11 @@
 .course-card {
-  border: 2px solid rgb(84, 160, 18);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 5px;
   border-radius: 15px;
-  margin: 10px 0;
   padding: 10px;
+  width: 95%;
+  margin: 15px auto;
 }
 
 .course-left-data {

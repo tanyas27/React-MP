@@ -1,8 +1,13 @@
 .course-info{
+    width: 90%;
+    margin: auto;
+}
+
+.course-info-desc{
     display: flex;
 }
 
-.course-info p{
+.course-info-desc p{
     width: 60%;
     margin: 0 15px;
 }

@@ -24,10 +24,12 @@ export const AuthorItem: React.FC<IAuthorItemProps> = ({
 		>
 			<span>{authorName}</span>
 			<CustomButton
-				role='outline-success'
-				buttonText={`${edit} author`}
+				role='outlined'
+				color={edit === 'Add' ? 'success' : 'error'}
 				click={editAuthor}
-			/>
+			>
+				{`${edit} author`}
+			</CustomButton>
 		</div>
 	);
 };

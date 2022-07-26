@@ -1,5 +1,17 @@
 .create-course-header{
     margin: 20px;
+    width: 80%;
+}
+
+.create-course-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#create-course-border{
+    margin: 20px;
+    width: 80%;
 }
 
 .authors-details{

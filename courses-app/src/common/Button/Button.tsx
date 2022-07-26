@@ -1,22 +1,36 @@
-import React from 'react';
-import { Button } from 'react-bootstrap';
+import React, { ReactNode } from 'react';
+import Button from '@mui/material/Button';
 
 interface iButtonProps {
-	buttonText: string;
+	children: ReactNode;
 	click?: () => void;
-	role: string;
+	role: 'text' | 'contained' | 'outlined';
 	type?: 'button' | 'submit' | 'reset';
+	color?: 'success' | 'error' | 'secondary' | 'warning' | 'info';
+	startIcon?: ReactNode;
+	fullWidth?: boolean;
 }
 
 export const CustomButton: React.FC<iButtonProps> = ({
-	buttonText,
+	children,
 	click,
 	role,
+	color,
 	type = 'button',
+	startIcon,
+	fullWidth = false,
 }) => {
 	return (
-		<Button variant={role} onClick={click} type={type}>
-			{buttonText}
+		<Button
+			variant={role}
+			onClick={click}
+			type={type}
+			color={color}
+			startIcon={startIcon}
+			style={{ margin: '5px' }}
+			fullWidth={fullWidth}
+		>
+			{children}
 		</Button>
 	);
 };
