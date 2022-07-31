@@ -7,6 +7,7 @@ import { FormControl, InputLabel, OutlinedInput } from '@mui/material';
 import { Box } from '@mui/system';
 import { IUser } from '../interface';
 import './Login.css';
+import { loginUser } from '../../store/services';
 
 export const Login = () => {
 	const [user, setUser] = useState<IUser>({
@@ -21,26 +22,13 @@ export const Login = () => {
 		setUser({ ...user, [name]: value });
 	};
 
-	const loginUser = async () => {
-		const response = await fetch('http://localhost:4000/login', {
-			method: 'POST',
-			body: JSON.stringify(user),
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		});
-
-		let res = await response.json();
-		dispatch(saveToken(res.result));
-		dispatch(saveUser(res));
-		return res;
-	};
-
 	const submitFormHandler = async (event: FormEvent) => {
 		event?.preventDefault();
 		if (user.email.length !== 0 && user.password.length !== 0) {
-			let result = await loginUser();
-			if (result) {
+			let res = await (await loginUser(user)).json();
+			if (res) {
+				dispatch(saveToken(res.result));
+				dispatch(saveUser(res));
 				nav('/courses', { replace: true });
 			}
 		} else {

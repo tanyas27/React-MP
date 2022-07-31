@@ -11,8 +11,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background:
-  linear-gradient(to top left, rgba(240, 242, 239, 0.537), transparent),
-  linear-gradient(to top right, rgba(25, 118, 210, 0.412), transparent);
+  linear-gradient(to top left, rgba(240, 242, 239, 0.337), transparent),
+  linear-gradient(to top right, rgba(25, 118, 210, 0.312), transparent);
   background-repeat: no-repeat;
 }
 

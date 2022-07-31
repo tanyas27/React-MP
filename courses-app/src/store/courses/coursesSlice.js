@@ -1,24 +1,31 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const coursesInitialState = []; // default value - empty array. After success getting courses from API - array of courses.
+const coursesInitialState = {
+	coursesList: [],
+	status: 'idle', // 'idle' | 'loading' | 'sucess' | 'failed'
+	error: null,
+};
 
 export const coursesSlice = createSlice({
 	name: 'courses',
 	initialState: coursesInitialState,
 	reducers: {
 		saveNewCourse: (state, action) => {
-			const courses = [...state];
-			courses.push(action.payload);
-			return [...courses];
+			const coursesList = [...state.coursesList];
+			coursesList.push(action.payload);
+			return { ...state, coursesList };
 		},
 		deleteCourse: (state, action) => {
-			let courses = [...state];
-			courses = courses.filter((course) => course.id !== action.payload);
-			return [...courses];
+			let coursesList = [...state.coursesList];
+			coursesList = coursesList.filter(
+				(course) => course.id !== action.payload
+			);
+			return { ...state, coursesList };
 		},
 		updateCourse: () => {},
 		getCourses: (state, action) => {
-			return [...action.payload];
+			//api fetch
+			return { ...state, coursesList: action.payload };
 		},
 	},
 });

@@ -12,10 +12,10 @@ export const CourseInfo = () => {
 	const nav = useNavigate();
 	const [courseData, setCourseData] = useState<ICourseInfo>();
 	const allCourses = useSelector<RootState, ICourseInfo[]>(
-		(state) => state.courses
+		(state) => state.courses.coursesList
 	);
 	const allAuthors = useSelector<RootState, IAuthorList>(
-		(state) => state.authors
+		(state) => state.authors.authorsList
 	);
 
 	const courseAuthors = allAuthors

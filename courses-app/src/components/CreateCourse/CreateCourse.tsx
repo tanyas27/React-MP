@@ -6,7 +6,7 @@ import {
 	OutlinedInput,
 } from '@mui/material';
 import moment from 'moment';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
@@ -20,7 +20,9 @@ import { AuthorItem } from './components/AuthorItem/AuthorItem';
 import './CreateCourse.css';
 
 export const CreateCourse: React.FC = () => {
-	const authors = useSelector<RootState, IAuthorList>((state) => state.authors);
+	const authors = useSelector<RootState, IAuthorList>(
+		(state) => state.authors.authorsList
+	);
 	const dispatch = useDispatch();
 
 	const [duration, setDuration] = useState<number>(0);

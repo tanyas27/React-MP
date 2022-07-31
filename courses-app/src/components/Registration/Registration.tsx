@@ -5,6 +5,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { CustomButton } from '../../common/Button/Button';
 import { IUser } from '../interface';
 import './Registration.css';
+import { registerUser } from '../../store/services';
 
 export const Registration = () => {
 	const [user, setUser] = useState<IUser>({
@@ -18,23 +19,10 @@ export const Registration = () => {
 		setUser({ ...user, [name]: value });
 	};
 
-	const createNewUser = async (newUser: IUser) => {
-		const response = await fetch('http://localhost:4000/register', {
-			method: 'POST',
-			body: JSON.stringify(user),
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		});
-
-		const result = await response.json();
-		return result;
-	};
-
 	const submitFormHandler = async (event: FormEvent<HTMLFormElement>) => {
 		event?.preventDefault();
 		if (user.email.length !== 0 && user.password.length !== 0) {
-			let result = await createNewUser(user);
+			let result = await (await registerUser(user)).json();
 			if (result) {
 				nav('/login', { replace: true });
 			}

@@ -5,7 +5,7 @@ import { CustomButton } from '../../common/Button/Button';
 import { RootState } from '../../store';
 import { getAuthors } from '../../store/authors/authorSlice';
 import { getCourses } from '../../store/courses/coursesSlice';
-import { getAllCourses } from '../../store/services';
+import { getAllAuthors, getAllCourses } from '../../store/services';
 import { ICourseInfo } from '../interface';
 import { CourseCard } from './components/CourseCard/CourseCard';
 import { SearchBar } from './components/SearchBar/SearchBar';
@@ -14,7 +14,7 @@ import './Courses.css';
 export const Courses: React.FC = () => {
 	const [courses, setCourses] = useState<ICourseInfo[]>([]);
 	const allCourses = useSelector<RootState, ICourseInfo[]>(
-		(state) => state.courses
+		(state) => state.courses.coursesList
 	);
 	const nav = useNavigate();
 	const dispatch = useDispatch();
@@ -26,7 +26,7 @@ export const Courses: React.FC = () => {
 	};
 
 	const fetchAuthors = async () => {
-		const res = await (await fetch('http://localhost:4000/authors/all')).json();
+		const res = await (await getAllAuthors()).json();
 		dispatch(getAuthors(res.result));
 	};
 
